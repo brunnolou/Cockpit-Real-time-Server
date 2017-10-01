@@ -1,0 +1,30 @@
+{
+  "name": "ws-refresh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "deploy": "now rm ws && now --public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunnolou/ws.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brunnolou/ws/issues"
+  },
+  "homepage": "https://github.com/brunnolou/ws#readme",
+  "dependencies": {
+    "express": "^4.16.1",
+    "websocket": "^1.0.24"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
