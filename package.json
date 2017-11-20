@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "deploy": "now rm ws && now --public",
+    "deploy": "now rm ws-refresh && now --public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

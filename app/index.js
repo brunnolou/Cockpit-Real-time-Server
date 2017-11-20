@@ -47,27 +47,25 @@ wsServer.on("request", function(request) {
     })
   );
 
-  // setInterval(() => {
-  // 	connection.sendUTF(
-  // 		JSON.stringify({
-  // 			action: "ping"
-  // 		})
-  // 	);
-  // }, 1500);
-
-  console.log(new Date() + " Connection accepted.");
-
   connection.on("message", function(message) {
-    if (message.type === "utf8") {
-      console.log("Received Message: " + message.utf8Data);
+    if (message.type !== "utf8") return;
 
+    connection.sendUTF(
+      JSON.stringify({
+        action: "connected",
+        message: message.utf8Data
+      })
+    );
+
+    // Broadcast.
+    Object.values(allActiveConnections).forEach(connection => {
       connection.sendUTF(
         JSON.stringify({
           action: "connected",
           message: message.utf8Data
         })
       );
-    }
+    });
   });
 
   connection.on("close", function(reasonCode, description) {
@@ -80,6 +78,7 @@ wsServer.on("request", function(request) {
 });
 
 app.use(express.static("public"));
+
 app.all("/refresh/:collection?/:id?", function(req, res, next) {
   const { collection, id } = req.params;
 
