@@ -22,11 +22,13 @@ function webSocketServer(httpServer) {
 
   // Accepts all protocols.
   router.mount('*', '*', (request) => {
-    if (!originIsAllowed(request.origin)) return request.reject();
+    if (!originIsAllowed(request.origin)) {
+      request.reject();
+      return;
+    }
 
     const connection = request.accept(request.origin);
 
-    // @TODO check request.protocol
     Connect(connection, request);
   });
 }

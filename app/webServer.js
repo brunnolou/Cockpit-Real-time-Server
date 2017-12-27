@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const config = require('./config');
+const events = require('./events');
 const Broadcast = require('./components/Broadcast');
 
 function webServer() {
@@ -13,15 +14,17 @@ function webServer() {
   app.use(bodyParser.json());
 
   app.post('/update', (req, res) => {
-    Broadcast('update', req.body);
+    const { body: { event, args } } = req.body;
 
-    res.end();
+    Broadcast(event, args);
+
+    res.send('ok');
   });
 
   app.get('/update', (req, res) => {
-    Broadcast('update');
+    const conns = Broadcast(events.COLLECTIONS_SAVE_AFTER);
 
-    res.send('update was broadcasted');
+    res.send(`update was broadcasted <pre>${JSON.stringify(conns)}`);
   });
 
   return httpServer;

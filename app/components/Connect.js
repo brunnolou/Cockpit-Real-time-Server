@@ -1,30 +1,23 @@
 const store = require('../store');
+const events = require('../events');
+const Broadcast = require('./Broadcast');
 
-function Connect(connection, { resourceURL: { query } }) {
+function Connect(connection, { protocol }) {
   const id = store.globalCounter;
 
-  store.activeConnections[id] = {
-    collection: query.collection,
-    connection,
-    id,
-    query,
-  };
+  store.activeConnections[id] = { connection, id };
 
   // Connected.
-  connection.sendUTF(JSON.stringify({ action: 'connected' }));
+  connection.sendUTF(JSON.stringify({ event: events.CONNECT }));
   store.globalCounter += 1;
 
   connection.on('message', (message) => {
     if (message.type !== 'utf8') return;
 
-    // Broadcast.
-    Object.values(store.activeConnections).forEach(({ connection: conn, ...rest }) => {
-      conn.sendUTF(JSON.stringify({
-        action: 'updated',
-        message: message.utf8Data,
-        ...rest,
-      }));
-    });
+    // Only broadcast preview messages.
+    if (protocol !== 'preview-protocol') return;
+
+    Broadcast(events.COLLECTIONS_PREVIEW);
   });
 
   connection.on('close', (reasonCode, description) => {

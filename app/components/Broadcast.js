@@ -1,18 +1,20 @@
 const store = require('../store');
+const events = require('../events');
 
-function Broadcast(action = 'updated', data) {
+function Broadcast(event, data) {
   const connections = Object.values(store.activeConnections);
 
-  connections.forEach(({ connection }) => {
-    try {
-      const obj = JSON.stringify({ action, data });
-      console.log('obj: ', obj);
+  if (!Object.values(events).includes(event)) return console.log('Invalid event:', event);
 
-      connection.sendUTF(obj);
-    } catch (error) {
-      console.log(error);
-    }
+  connections.forEach(({ connection, id }) => {
+    if (!connection) return;
+
+    connection.send(JSON.stringify({ event, data }));
+
+    console.log('Broadcasted event: ', id, event);
   });
+
+  return Object.keys(store.activeConnections);
 }
 
 module.exports = Broadcast;
