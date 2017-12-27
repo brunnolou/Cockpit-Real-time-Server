@@ -14,9 +14,9 @@ function webServer() {
   app.use(bodyParser.json());
 
   app.post('/update', (req, res) => {
-    const { body: { event, args } } = req.body;
+    const { body: { event, args } } = req;
 
-    Broadcast(event, args);
+    Broadcast(event, args[1], args[0]);
 
     res.send('ok');
   });

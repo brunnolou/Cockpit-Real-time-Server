@@ -26,7 +26,7 @@
 		"fetch": "^1.1.0",
 		"isomorphic-fetch": "^2.2.1",
 		"node-fetch": "^2.0.0-alpha.9",
-		"websocket": "^1.0.24"
+		"ws": "^3.3.3"
 	},
 	"devDependencies": {
 		"eslint": "^4.11.0",

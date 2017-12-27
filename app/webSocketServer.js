@@ -1,35 +1,11 @@
-const WebSocketServer = require('websocket').server;
-const WebSocketRouter = require('websocket').router;
+const WebSocket = require('ws');
 const Connect = require('./components/Connect');
 
-const originIsAllowed = origin => true || origin;
+function webSocketServer(server) {
+  const wss = new WebSocket.Server({ server });
 
-function webSocketServer(httpServer) {
-  const wsServer = new WebSocketServer({
-    httpServer,
-    // You should not use autoAcceptConnections for production
-    // applications, as it defeats all standard cross-origin protection
-    // facilities built into the protocol and the browser.  You should
-    // *always* verify the connection's origin and decide whether or not
-    // to accept it.
-    autoAcceptConnections: false,
-  });
-
-  // Ws Router.
-  const router = new WebSocketRouter();
-
-  router.attachServer(wsServer);
-
-  // Accepts all protocols.
-  router.mount('*', '*', (request) => {
-    if (!originIsAllowed(request.origin)) {
-      request.reject();
-      return;
-    }
-
-    const connection = request.accept(request.origin);
-
-    Connect(connection, request);
+  wss.on('connection', (connection, req) => {
+    Connect(connection, req);
   });
 }
 

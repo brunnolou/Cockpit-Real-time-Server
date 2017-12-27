@@ -2,27 +2,39 @@ const store = require('../store');
 const events = require('../events');
 const Broadcast = require('./Broadcast');
 
-function Connect(connection, { protocol }) {
+function Connect(connection, req) {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  // const location = url.parse(req.url, true);
+  // You might use location.query.access_token to authenticate or share sessions
+  // or req.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+
   const id = store.globalCounter;
 
   store.activeConnections[id] = { connection, id };
 
   // Connected.
-  connection.sendUTF(JSON.stringify({ event: events.CONNECT }));
+  connection.send(JSON.stringify({ event: events.CONNECT }));
   store.globalCounter += 1;
 
   connection.on('message', (message) => {
-    if (message.type !== 'utf8') return;
+    let data;
+    try {
+      data = JSON.parse(message);
+    } catch (error) {
+      return;
+    }
 
-    // Only broadcast preview messages.
-    if (protocol !== 'preview-protocol') return;
-
-    Broadcast(events.COLLECTIONS_PREVIEW);
+    Broadcast(data.event, data.entry);
   });
 
-  connection.on('close', (reasonCode, description) => {
-    console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected. ${description}`);
+  connection.on('error', (error) => {
+    console.log(`${new Date()} Peer ${ip} disconnected. ${error}`);
+    delete store.activeConnections[connection.id];
+  });
 
+  connection.on('close', (error) => {
+    console.log(`${new Date()} Peer ${ip} disconnected. ${error}`);
     delete store.activeConnections[connection.id];
   });
 }
