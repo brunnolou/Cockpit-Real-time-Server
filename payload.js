@@ -2,13 +2,13 @@
 // WebHook
 const WebHook = {
   event: 'collections.save.after',
-  hook: 'requestb',
+  hook: 'Cockpit Real-time',
   backend: 1,
   args: [
-    'portfolio',
+    'projects',
     {
-      title: 'Project Ones',
-      description: 'clodsmcaoidnc ',
+      title: 'Project One',
+      description: 'Project description',
       title_slug: 'project-ones',
       _mby: '5a3bf33ab5262doc1197003155',
       _by: '5a3bf33ab5262doc1197003155',
@@ -24,9 +24,10 @@ const WebHook = {
 // WebSocket
 const WebSocket = {
   event: 'cockpit:collections.preview',
+  collection: 'projects',
   entry: {
-    title: 'This is supper fast!!',
-    description: 'Oi',
+    title: 'Project One changed',
+    description: 'Project description',
     published: true,
     title_slug: 'this-is-supper-fast',
     _mby: '5a3bf33ab5262doc1197003155',

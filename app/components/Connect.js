@@ -25,7 +25,7 @@ function Connect(connection, req) {
       return;
     }
 
-    Broadcast(data.event, data.entry);
+    Broadcast(data);
   });
 
   connection.on('error', (error) => {

@@ -16,7 +16,7 @@ function webServer() {
   app.post('/update', (req, res) => {
     const { body: { event, args } } = req;
 
-    Broadcast(event, args[1], args[0]);
+    Broadcast({ event, entry: args[1], collection: args[0] });
 
     res.send('ok');
   });
