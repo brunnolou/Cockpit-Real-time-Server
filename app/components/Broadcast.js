@@ -1,11 +1,12 @@
 const store = require('../store');
-const events = require('../events');
+const { isValid } = require('../events');
 
 function Broadcast(data) {
   const connections = Object.values(store.activeConnections);
 
-  if (!Object.values(events).includes(data.event)) {
-    return console.log('Invalid event:', data.event);
+  if (!isValid(data.event)) {
+    console.log('Invalid event:', data.event);
+    return false;
   }
 
   connections.forEach(({ connection, id }) => {
@@ -23,7 +24,7 @@ function Broadcast(data) {
     console.log('Broadcasted event: ', [id], response.event);
   });
 
-  return Object.keys(store.activeConnections);
+  return true;
 }
 
 module.exports = Broadcast;

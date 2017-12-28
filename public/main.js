@@ -21,6 +21,10 @@ Button.onclick = () => {
 ws.onmessage = function onmessage(evt) {
   const obj = JSON.parse(evt.data);
 
-  messages.push(JSON.stringify(obj, null, '  '));
-  Messages.innerHTML = messages.join('<br />---------------------------<br />');
+  messages.push(`<b>${new Date()}:</b><br />${JSON.stringify(obj, null, '  ')}`);
+
+  Messages.innerHTML = messages
+    .slice(0)
+    .reverse()
+    .join('<br /><hr /><br />');
 };

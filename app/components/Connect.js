@@ -1,6 +1,6 @@
-const store = require('../store');
-const events = require('../events');
 const Broadcast = require('./Broadcast');
+const store = require('../store');
+const { events } = require('../events');
 
 function Connect(connection, req) {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
