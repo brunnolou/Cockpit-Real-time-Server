@@ -6,7 +6,7 @@ You can use the following [Javascript SDK](https://github.com/brunnolou/cockpit-
 
 ## Cockpit Webhook
 
-Add a Webhook to Cokpit with the following settings:
+Add a Webhook to Cockpit with the following settings:
 
 * **Url**: `http://localhost:4000/update`
 
